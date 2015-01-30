@@ -243,7 +243,7 @@ module ActiveDirectory
             return false unless connected?
 
             options = {
-                :filter => (args[1].blank?) ? NIL_FILTER : args[1],
+                :filter => (args[1].nil?) ? NIL_FILTER : args[1],
                 :in => '',
                 :attributes => Array.new
             }
