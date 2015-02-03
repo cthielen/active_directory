@@ -404,7 +404,7 @@ module ActiveDirectory
 
             operations = []
             attributes_to_update.each do |attribute, values|
-                if values.present?
+                if values
                     values = [values] unless values.is_a? Array
                     values = values.collect { |v| v.to_s }
 
