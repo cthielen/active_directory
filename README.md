@@ -7,7 +7,7 @@ Ruby Integration with Microsoft's Active Directory system based on original code
 See documentation on ActiveDirectory::Base for more information.
 
 Caching:
-Queries for membership and group membership are based on the distinguished name of objects.  Doing a lot of queries, especially for a Rails app, is a sizable slowdown.  To alleviate the problem, I've implemented a very basic cache for queries which search by :distinguishedname.  This is diabled by default.  All other queries are unaffected.
+Queries for membership and group membership are based on the distinguished name of objects.  Doing a lot of queries, especially for a Rails app, is a sizable slowdown.  To alleviate the problem, I've implemented a very basic cache for queries which search by :distinguishedname.  This is disabled by default.  All other queries are unaffected.
 
 
 <h3>INSTALL (with Bundler for instance)</h3>

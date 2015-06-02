@@ -24,6 +24,7 @@ module ActiveDirectory
 
 		UAC_ACCOUNT_DISABLED = 0x0002
 		UAC_NORMAL_ACCOUNT   = 0x0200 # 512
+		UAC_PASSWORD_NEVER_EXPIRES = 0x10000 #65536
 
 		def self.filter # :nodoc:
 			Net::LDAP::Filter.eq(:objectClass,'user') & ~Net::LDAP::Filter.eq(:objectClass,'computer')
@@ -75,7 +76,7 @@ module ActiveDirectory
 		# called Marketting, this method would only return the Sales group.
 		#
 		def groups
-			@groups ||= Group.find(:all, :distinguishedname => @entry.memberOf)
+			@groups ||= Group.find(:all, :distinguishedname => @entry[:memberOf] )
 		end
 
 		#
@@ -103,6 +104,37 @@ module ActiveDirectory
 		#
 		def disabled?
 			userAccountControl.to_i & UAC_ACCOUNT_DISABLED != 0
+		end
+
+		#
+		# Disables the account
+		#
+		def disable
+			new_mask = userAccountControl.to_i | UAC_ACCOUNT_DISABLED
+			update_attributes userAccountControl: new_mask.to_s
+		end
+
+		#
+		# Enables the account
+		#
+		def enable
+			new_mask = userAccountControl.to_i ^ UAC_ACCOUNT_DISABLED
+			update_attributes userAccountControl: new_mask.to_s
+		end
+
+
+		#
+		# Returns true if this account is expired.
+		#
+		def expired?
+			!lockoutTime.nil? && lockoutTime.to_i != 0
+		end
+
+		#
+		# Returns true if this account has a password that does not expire.
+		#
+		def password_never_expires?
+			userAccountControl.to_i & UAC_PASSWORD_NEVER_EXPIRES != 0
 		end
 
 		#
